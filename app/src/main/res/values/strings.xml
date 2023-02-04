@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MovieSearch</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="popular">Popular</string>
 </resources>
