@@ -2,6 +2,8 @@ buildscript {
     ext {
         compose_ui_version = '1.4.0-alpha05'
         accompanist_version = "0.27.0"
+        room_version = "2.5.0"
+        kotlin_version = "1.8.0"
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

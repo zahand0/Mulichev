@@ -78,4 +78,30 @@ dependencies {
 
     // Navigation animation - Accompanist
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
+
+    // Room
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
+    // Room Paging 3 integration
+    implementation "androidx.room:room-paging:2.5.0"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
+    // Paging
+    implementation "androidx.paging:paging-compose:1.0.0-alpha17"
+
+    // Coil
+    implementation "io.coil-kt:coil-compose:2.2.2"
+
+    // Horizontal Pager and Indicators - Accompanist
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
+
+    // Swipe to Refresh - Accompanist
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
+
 }
