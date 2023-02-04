@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.zahand0.moviesearch.ui.navigation.SetupNavGraph
+import com.zahand0.moviesearch.navigation.SetupNavGraph
 import com.zahand0.moviesearch.ui.theme.MovieSearchTheme
 import dagger.hilt.android.AndroidEntryPoint
 
