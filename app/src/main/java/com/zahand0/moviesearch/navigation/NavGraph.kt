@@ -1,4 +1,4 @@
-package com.zahand0.moviesearch.ui.navigation
+package com.zahand0.moviesearch.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
@@ -16,10 +16,10 @@ fun SetupNavGraph(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.MovieList.route
+        startDestination = Screen.Popular.route
     ) {
         composable(
-            route = Screen.MovieList.route,
+            route = Screen.Popular.route,
             enterTransition = { scaleIn() },
             exitTransition = { scaleOut() }
         ) {
