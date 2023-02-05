@@ -6,6 +6,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\AndroidStudioProjects\\MovieSearch\\movie_search.jks')
+            storePassword '11111111'
+            keyPassword '11111111'
+            keyAlias 'key0'
+        }
+    }
     namespace 'com.zahand0.moviesearch'
     compileSdk 33
 
@@ -26,6 +34,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

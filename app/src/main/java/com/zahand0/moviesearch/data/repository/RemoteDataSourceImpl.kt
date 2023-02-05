@@ -8,6 +8,7 @@ import com.zahand0.moviesearch.data.local.FilmDatabase
 import com.zahand0.moviesearch.data.paging_source.FilmRemoteMediator
 import com.zahand0.moviesearch.data.remote.KinopoiskUnofficialAPI
 import com.zahand0.moviesearch.domain.model.Film
+import com.zahand0.moviesearch.domain.model.FilmDetails
 import com.zahand0.moviesearch.domain.repository.RemoteDataSource
 import com.zahand0.moviesearch.util.Constants
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,10 @@ class RemoteDataSourceImpl(
     override fun getAllFilms(): Flow<PagingData<Film>> {
         val pagingSourceFactory = { filmDao.getAllFilms() }
         return Pager(
-            config = PagingConfig(pageSize = Constants.ITEMS_PER_PAGE),
+            config = PagingConfig(
+                pageSize = Constants.ITEMS_PER_PAGE,
+                initialLoadSize = Constants.ITEMS_INITIAL_LOAD
+            ),
             remoteMediator = FilmRemoteMediator(
                 kinopoiskUnofficialAPI = kinopoiskUnofficialAPI,
                 filmDatabase = filmDatabase
@@ -37,9 +41,7 @@ class RemoteDataSourceImpl(
 //        TODO("Not yet implemented")
 //    }
 
-    override fun getFilm(id: Int): Flow<Film> {
-        return flow {
-            filmDao.getSelectedFilm(filmId = id)
-        }
+    override suspend fun getFilm(id: Int): FilmDetails {
+        return kinopoiskUnofficialAPI.getFilm(id = id)
     }
 }

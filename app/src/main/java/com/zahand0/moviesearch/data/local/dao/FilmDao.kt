@@ -10,11 +10,8 @@ import com.zahand0.moviesearch.domain.model.Film
 @Dao
 interface FilmDao {
 
-    @Query("SELECT * FROM film_table ORDER BY filmId ASC")
+    @Query("SELECT f.* FROM film_table as f JOIN film_remote_keys_table AS r on f.filmId = r.id ORDER BY r.prevPage, r.indexInPage ASC")
     fun getAllFilms(): PagingSource<Int, Film>
-
-    @Query("SELECT * FROM film_table WHERE filmId=:filmId")
-    fun getSelectedFilm(filmId: Int): Film
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFilms(films: List<Film>)

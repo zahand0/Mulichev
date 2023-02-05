@@ -16,6 +16,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @ExperimentalPagingApi
@@ -27,15 +28,19 @@ object NetworkModule {
     @Singleton
     fun provideHttpClient(): OkHttpClient {
 
-        return OkHttpClient.Builder().apply {
-            addInterceptor(
-                Interceptor { chain ->
-                    val builder = chain.request().newBuilder()
-                    builder.header("X-API-KEY", Constants.API_KEY)
-                    return@Interceptor chain.proceed(builder.build())
-                }
-            )
-        }.build()
+        return OkHttpClient.Builder()
+            .apply {
+                addInterceptor(
+                    Interceptor { chain ->
+                        val builder = chain.request().newBuilder()
+                        builder.header("X-API-KEY", Constants.API_KEY)
+                        return@Interceptor chain.proceed(builder.build())
+                    }
+                )
+            }
+            .readTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .build()
     }
 
     @Provides

@@ -1,6 +1,7 @@
 package com.zahand0.moviesearch.data.remote
 
 import com.zahand0.moviesearch.domain.model.Film
+import com.zahand0.moviesearch.domain.model.FilmDetails
 import com.zahand0.moviesearch.domain.model.FilmListResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,9 +15,9 @@ interface KinopoiskUnofficialAPI {
         @Query("type") type: String = "TOP_100_POPULAR_FILMS",
     ): FilmListResponse
 
-    @GET(" /api/v2.2/films/top/{id}")
+    @GET(" /api/v2.2/films/{id}")
     suspend fun getFilm(
         @Path("id") id: Int
-    ): Film
+    ): FilmDetails
 
 }

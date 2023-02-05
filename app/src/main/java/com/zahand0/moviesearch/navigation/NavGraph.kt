@@ -7,6 +7,8 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.zahand0.moviesearch.ui.screen.movie.MovieScreen
+import com.zahand0.moviesearch.ui.screen.popular.PopularScreen
 import com.zahand0.moviesearch.util.Constants
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -23,7 +25,7 @@ fun SetupNavGraph(
             enterTransition = { scaleIn() },
             exitTransition = { scaleOut() }
         ) {
-
+            PopularScreen(navController = navController)
         }
         composable(
             route = Screen.Search.route,
@@ -35,12 +37,12 @@ fun SetupNavGraph(
         composable(
             route = Screen.Movie.route,
             arguments = listOf(navArgument(Constants.MOVIE_SCREEN_ARGUMENT_KEY) {
-                type = NavType.StringType
+                type = NavType.IntType
             }),
             enterTransition = { slideInHorizontally { it } },
             exitTransition = { slideOutHorizontally { it } }
         ) {
-
+            MovieScreen(navController = navController)
         }
     }
 }

@@ -20,11 +20,14 @@ object DatabaseModule {
     fun provideDatabase(
         @ApplicationContext context: Context
     ): FilmDatabase {
-        return Room.databaseBuilder(
-            context,
-            FilmDatabase::class.java,
-            Constants.FILM_DATABASE_NAME
-        ).build()
+        return Room
+            .databaseBuilder(
+                context,
+                FilmDatabase::class.java,
+                Constants.FILM_DATABASE_NAME
+            )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
 }

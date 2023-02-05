@@ -1,14 +1,13 @@
 package com.zahand0.moviesearch.data.paging_source
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadType
-import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
+import android.util.Log
+import androidx.paging.*
 import androidx.room.withTransaction
 import com.zahand0.moviesearch.data.local.FilmDatabase
 import com.zahand0.moviesearch.data.remote.KinopoiskUnofficialAPI
 import com.zahand0.moviesearch.domain.model.Film
 import com.zahand0.moviesearch.domain.model.FilmRemoteKeys
+import com.zahand0.moviesearch.util.Constants
 import javax.inject.Inject
 
 @ExperimentalPagingApi
@@ -22,13 +21,16 @@ class FilmRemoteMediator @Inject constructor(
 
     override suspend fun initialize(): InitializeAction {
         val currentTime = System.currentTimeMillis()
-        val lastUpdated = filmRemoteKeysDao.getRemoteKeys(1)?.lastUpdated ?: 0L
+        val lastUpdated = filmRemoteKeysDao.getFirstRemoteKeys()?.lastUpdated ?: 0L
+        Log.d("RemoteMediator", "init: filmRemoteKeys ${filmRemoteKeysDao.getFirstRemoteKeys()}")
         val cacheTimeout = 1440
 
         val diffInMinutes = (currentTime - lastUpdated) / 1000 / 60
         return if (diffInMinutes.toInt() <= cacheTimeout) {
+            Log.d("RemoteMediator", "init: skip refresh")
             InitializeAction.SKIP_INITIAL_REFRESH
         } else {
+            Log.d("RemoteMediator", "init: refresh $diffInMinutes")
             InitializeAction.LAUNCH_INITIAL_REFRESH
         }
     }
@@ -65,14 +67,19 @@ class FilmRemoteMediator @Inject constructor(
                         filmDao.deleteAllFilms()
                         filmRemoteKeysDao.deleteAllRemoteKeys()
                     }
-                    val prevPage = if (page <= 1) 1 else page - 1
-                    val nextPage = if (page >= response.pagesCount) null else page + 1
-                    val keys = response.films.map { film ->
+                    val prevPage = if (page <= 1) null else page - 1
+                    val nextPage =
+                        if (page >= response.pagesCount || page >= Constants.API_MAX_PAGE_NUMBER)
+                            null
+                        else
+                            page + 1
+                    val keys = response.films.mapIndexed { index, film ->
                         FilmRemoteKeys(
                             id = film.filmId,
                             prevPage = prevPage,
                             nextPage = nextPage,
-                            lastUpdated = System.currentTimeMillis()
+                            lastUpdated = System.currentTimeMillis(),
+                            indexInPage = index
                         )
                     }
                     filmRemoteKeysDao.addAllRemoteKeys(filmRemoteKeys = keys)
@@ -81,6 +88,7 @@ class FilmRemoteMediator @Inject constructor(
             }
             MediatorResult.Success(endOfPaginationReached = response.pagesCount == page)
         } catch (e: Exception) {
+            Log.e("RemoteMediator", "error", e)
             MediatorResult.Error(e)
         }
     }

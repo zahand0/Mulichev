@@ -5,6 +5,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -13,7 +16,7 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
+    primary = Blue,
     primaryVariant = Purple700,
     secondary = Teal200
 
@@ -33,6 +36,16 @@ fun MovieSearchTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compo
         DarkColorPalette
     } else {
         LightColorPalette
+    }
+
+    val systemUiController = rememberSystemUiController()
+    DisposableEffect(key1 = true) {
+        systemUiController.statusBarDarkContentEnabled = true
+        systemUiController.setStatusBarColor(
+            color = colors.background,
+            darkIcons = !darkTheme
+        )
+        onDispose {}
     }
 
     MaterialTheme(
